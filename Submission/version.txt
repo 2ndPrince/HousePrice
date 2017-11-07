@@ -1,0 +1,4 @@
+v1 = Numeric value only with their corr > 0.4
+v2 = Numeric and Category(>0.3) with linearRegression
+v3 = v2 with RandomForest Model
+v4 = Imputer and StandardScaler with panda missing column taken care
