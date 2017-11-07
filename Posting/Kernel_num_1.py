@@ -75,7 +75,6 @@ rmse = np.sqrt(mean_squared_error(y_test, y_pred_forest))
 print("Root Mean Squared Error: {}".format(rmse))
 
 # ------------------------------------------- #
-
 # Import the necessary modules
 from sklearn.model_selection import cross_val_score
 
