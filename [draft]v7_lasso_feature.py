@@ -2,8 +2,25 @@
 # I am new to Machine Learning. This is my first solution without referring or looking any other kernels.
 # Comment me for suggestions.
 
+# Version 7: Trying to make helper functions for automation. 
+#            Feature Engineering to remove, combine and create new variable-in-training-and-testing-data
+#            version 6 was lasso regression.
 # ------------------------------------------- #
 
+def load_data(location):
+	if(location == 1): # Desktop
+		path_train = "D:/DataScience/Kaggle/HousePrice/Data/train.csv"
+		path_test = "D:/DataScience/Kaggle/HousePrice/Data/test.csv"
+	elif(location == 2): # Laptop
+		path_train = "C:/Users/User/Documents/GitHub/HousePrice/Data/train.csv"
+		path_test = "C:/Users/User/Documents/GitHub/HousePrice/Data/test.csv"
+	elif(location == 3): # Kaggle Kernel
+		path_train = "../input/train.csv"
+		path_test =  "../input/test.csv"
+	else:
+		print("No location found")
+	return pd.read_csv(path_train), pd.read_csv(path_test)
+	
 # Removes certain rows for outlier data # Example: df = remove_outlier(df,[34,127,359])
 def remove_outlier(df,id_array):
     for i in range(len(id_array)):
@@ -28,28 +45,40 @@ def cat_analysis(df, cat, label):
 	cat_df_dummy = pd.get_dummies(df[cat])
 	catdf_analysis = pd.concat([df['SalePrice'], cat_df_dummy], axis=1)
 	print(catdf_analysis.corr()['SalePrice'].sort_values(ascending=False))
+	print(df[cat].value_counts())
+	plot_categories(df,cat,label)
+
+# https://www.kaggle.com/helgejo/an-interactive-data-science-tutorial	
+def plot_categories( df , cat , target , **kwargs ):
+    row = kwargs.get( 'row' , None )
+    col = kwargs.get( 'col' , None )
+    facet = sns.FacetGrid( df , row = row , col = col )
+    facet.map( sns.barplot , cat , target )
+    facet.add_legend()	
 	
-    #print(df[cat].describe())
-    #sns.distplot(df[cat])
-    #print(df[cat].value_counts())
-#cat_analysis(df,'HeatingQC','SalePrice')
+
+	
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import norm
 from scipy import stats
+import warnings
 %matplotlib inline
+warnings.filterwarnings('ignore')
 
-
-df = pd.read_csv('D:/DataScience/Kaggle/HousePrice/Data/train.csv')
-df_test = pd.read_csv('D:/DataScience/Kaggle/HousePrice/Data/test.csv')
-
-df['SalePrice'].describe()
-sns.distplot(df_train['SalePrice']);
-
-#applying log transformation	
+# Load data set	
+df, df_test = load_data(2)
+# Applying log transformation	
 df['SalePrice'] = np.log1p(df['SalePrice'])
+
+
+#cat_analysis(df,"HeatingQC","SalePrice")
+
+
+
+
 df_num, df_label, important_index = filter_num(df, 'SalePrice', 0.5)
 
 from sklearn.preprocessing import Imputer
